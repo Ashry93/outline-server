@@ -16,17 +16,17 @@
 
 run_action shadowbox/docker/build
 
-RUN_ID="${RUN_ID:-$(date +%Y-%m-%d-%H%M%S)}"
+RUN_ID="${RUN_ID:-.outline}"
 readonly RUN_ID
-readonly RUN_DIR="/tmp/outline/${RUN_ID}"
+readonly RUN_DIR="/home/${USER}/${RUN_ID}"
 echo "Using directory ${RUN_DIR}"
 
 readonly HOST_STATE_DIR="${RUN_DIR}/persisted-state"
 readonly CONTAINER_STATE_DIR='/root/shadowbox/persisted-state'
 readonly STATE_CONFIG="${HOST_STATE_DIR}/shadowbox_server_config.json"
 
-declare -ir ACCESS_KEY_PORT=${ACCESS_KEY_PORT:-9999}
-declare -ir SB_API_PORT=${SB_API_PORT:-8081}
+declare -ir ACCESS_KEY_PORT=${ACCESS_KEY_PORT:-17215}
+declare -ir SB_API_PORT=${SB_API_PORT:-17214}
 
 [[ -d "${HOST_STATE_DIR}" ]] || mkdir -p "${HOST_STATE_DIR}"
 [[ -e "${STATE_CONFIG}" ]] || echo "{\"hostname\":\"127.0.0.1\", \"portForNewAccessKeys\": ${ACCESS_KEY_PORT}}" > "${STATE_CONFIG}"
@@ -39,9 +39,9 @@ declare -ar docker_bindings=(
   -e "SB_STATE_DIR=${CONTAINER_STATE_DIR}"
   -v "${SB_CERTIFICATE_FILE}:${SB_CERTIFICATE_FILE}"
   -v "${SB_PRIVATE_KEY_FILE}:${SB_PRIVATE_KEY_FILE}"
-  -e "LOG_LEVEL=${LOG_LEVEL:-debug}"
+  -e "LOG_LEVEL=${LOG_LEVEL:-error}"
   -e "SB_API_PORT=${SB_API_PORT}"
-  -e "SB_API_PREFIX=TestApiPrefix"
+  -e "SB_API_PREFIX=AshryBSOutline"
   -e "SB_CERTIFICATE_FILE=${SB_CERTIFICATE_FILE}"
   -e "SB_PRIVATE_KEY_FILE=${SB_PRIVATE_KEY_FILE}"
   -e "SB_METRICS_URL=${SB_METRICS_URL:-https://dev.metrics.getoutline.org}"
