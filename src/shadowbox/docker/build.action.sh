@@ -26,7 +26,7 @@ export DOCKER_CONTENT_TRUST="${DOCKER_CONTENT_TRUST:-1}"
 export DOCKER_BUILDKIT=1
 
 # Docker image build architecture. Supported architectures: x86_64, arm64
-export ARCH=${ARCH:-x86_64}
+export ARCH=${ARCH:-arm64}
 
 # Newer node images have no valid content trust data.
 # Pin the image node:16.18.0-alpine3.16 by hash.
