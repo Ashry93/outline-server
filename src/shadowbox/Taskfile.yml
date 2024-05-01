@@ -8,11 +8,12 @@ tasks:
     desc: Build the Outline Server Node.js app
     vars:
       TARGET_OS: '{{.TARGET_OS | default "linux"}}'
-      TARGET_ARCH: '{{.TARGET_ARCH | default "x86_64"}}'
+      TARGET_ARCH: '{{.TARGET_ARCH | default "arm64"}}'
       GOARCH: '{{get (dict "x86_64" "amd64") .TARGET_ARCH | default .TARGET_ARCH}}'
       TARGET_DIR: '{{.TARGET_DIR | default (joinPath .OUTPUT_BASE .TARGET_OS .TARGET_ARCH)}}'
       NODE_DIR: '{{joinPath .TARGET_DIR "app"}}'
       BIN_DIR: '{{joinPath .TARGET_DIR "bin"}}'
+      RUN_ID: '{{".outline"}}'
     cmds:
       - echo Target platform is {{.TARGET_OS}}/{{.TARGET_ARCH}}
       - rm -rf '{{.TARGET_DIR}}'
@@ -33,13 +34,13 @@ tasks:
       TARGET_OS: {sh: "uname -s | tr '[:upper:]' '[:lower:]'"}
       TARGET_ARCH: {sh: 'uname -m'}
       RUN_ID: '{{.RUN_ID | default (now | date "2006-01-02-150405")}}'
-      RUN_DIR: '{{joinPath "/tmp/outline" .RUN_ID}}'
+      RUN_DIR: '{{joinPath "/home/dietpi" .RUN_ID}}'
       STATE_DIR: '{{joinPath .RUN_DIR "persisted-state"}}'
       STATE_CONFIG: '{{joinPath .STATE_DIR "shadowbox_server_config.json"}}'
-      LOG_LEVEL: '{{.LOG_LEVEL | default "debug"}}'
+      LOG_LEVEL: '{{.LOG_LEVEL | default "error"}}'
     env:
       # WARNING: The SB_API_PREFIX should be kept secret!
-      SB_API_PREFIX: TestApiPrefix
+      SB_API_PREFIX: AshryBSOutline
       SB_METRICS_URL: https://dev.metrics.getoutline.org
       SB_STATE_DIR: '{{.STATE_DIR}}'
       SB_PUBLIC_IP: localhost
@@ -103,8 +104,8 @@ tasks:
     vars:
       RUN_DIR: '{{joinPath .OUTPUT_BASE "docker_start"}}'
       IMAGE_NAME: '{{.IMAGE_NAME | default "localhost/outline/shadowbox"}}'
-      API_PORT: '8081'
-      ACCESS_KEY_PORT: '9999'
+      API_PORT: '17214'
+      ACCESS_KEY_PORT: '17215'
       CERTIFICATE_FILE: 'shadowbox-selfsigned-dev.crt'
       PRIVATE_KEY_FILE: 'shadowbox-selfsigned-dev.key'
       HOST_STATE_DIR: '{{joinPath .RUN_DIR "persisted-state"}}'
@@ -118,7 +119,7 @@ tasks:
         vars: {OUTPUT_DIR: '{{.HOST_STATE_DIR}}'}
       - |
         docker_command=(
-          '{{.DOCKER}}' run -it --rm --name 'shadowbox'
+          '{{.DOCKER}}' run -it --rm --detach --name 'shadowbox'
           {{if eq OS "linux" -}}
           --net host
           {{else}}
