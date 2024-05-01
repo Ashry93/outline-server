@@ -60,7 +60,7 @@ tasks:
     vars:
       VERSION: '{{.IMAGE_VERSION | default "dev"}}'
       IMAGE_NAME: '{{.IMAGE_NAME | default "localhost/outline/shadowbox"}}'
-      TARGET_ARCH: '{{.TARGET_ARCH | default "x86_64"}}'
+      TARGET_ARCH: '{{.TARGET_ARCH | default "arm64"}}'
       IMAGE_ROOT: '{{joinPath .OUTPUT_BASE "image_root" .TARGET_ARCH}}'
       # Newer node images have no valid content trust data.
       # Pin the image node:16.18.0-alpine3.16 by hash.
@@ -135,7 +135,7 @@ tasks:
 
           # Port number and path prefix used by the server manager API.
           -e "SB_API_PORT={{.API_PORT}}"
-          -e "SB_API_PREFIX=TestApiPrefix"
+          -e "SB_API_PREFIX=AshryBSOutline"
 
           # Location of the API TLS certificate and key.
           -e "SB_CERTIFICATE_FILE={{joinPath .CONTAINER_STATE_DIR .CERTIFICATE_FILE}}"
