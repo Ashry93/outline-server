@@ -1,5 +1,8 @@
 version: '3'
 
+vars:
+  OUTPUT_BASE: '{{"/home/dietpi/.outline"}}'
+
 requires:
   vars: [OUTPUT_BASE]
 
