@@ -42,7 +42,7 @@ readonly NODE_IMAGE=$(
     fi
 )
 
-docker build --force-rm \
+docker build \
     --build-arg ARCH="${ARCH}" \
     --build-arg NODE_IMAGE="${NODE_IMAGE}" \
     --build-arg VERSION="${SB_VERSION:-dev}" \
