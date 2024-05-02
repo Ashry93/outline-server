@@ -81,7 +81,7 @@ tasks:
     cmds:
       - rm -rf '{{.IMAGE_ROOT}}'
       - mkdir -p '{{.IMAGE_ROOT}}'
-      - {task: build, vars: {TARGET_OS: linux, TARGET_ARCH: '{{.TARGET_ARCH}}', TARGET_DIR: '{{joinPath .IMAGE_ROOT "/opt/outline-server"}}'}}
+      #- {task: build, vars: {TARGET_OS: linux, TARGET_ARCH: '{{.TARGET_ARCH}}', TARGET_DIR: '{{joinPath .IMAGE_ROOT "/opt/outline-server"}}'}}
       - cp -R '{{joinPath .TASKFILE_DIR "scripts"}}' '{{.IMAGE_ROOT}}/scripts'
       - mkdir -p '{{joinPath .IMAGE_ROOT "/etc/periodic/weekly"}}'
       - cp '{{joinPath .TASKFILE_DIR "scripts" "update_mmdb.sh"}}' '{{joinPath .IMAGE_ROOT "/etc/periodic/weekly/"}}'
@@ -103,7 +103,7 @@ tasks:
     interactive: true
     requires:
       vars: [DOCKER]
-    deps: [{task: docker:build, vars: {TARGET_ARCH: {sh: 'uname -m'}}}]
+    deps: [{task: docker:build, vars: {TARGET_ARCH: 'arm64'}}]
     vars:
       RUN_DIR: '{{joinPath .OUTPUT_BASE "docker_start"}}'
       IMAGE_NAME: '{{.IMAGE_NAME | default "localhost/outline/shadowbox"}}'
